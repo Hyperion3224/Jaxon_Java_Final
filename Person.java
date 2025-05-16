@@ -2,12 +2,10 @@
 import java.io.Serializable;
 
 public class Person implements Serializable {
-    // Private variables
     private String firstName;
     private String lastName;
     private OCCCDate dob;
 
-    // Constructors
     public Person(String firstName, String lastName, OCCCDate dob) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -19,7 +17,6 @@ public class Person implements Serializable {
         this.lastName = p.lastName;
     }
 
-    // Getters
     public String getFirstName() {
         return new String(firstName);
     }
@@ -32,7 +29,6 @@ public class Person implements Serializable {
         return dob;
     }
 
-    // Setters
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -41,18 +37,15 @@ public class Person implements Serializable {
         this.lastName = lastName;
     }
 
-    // toString for the first and last name
     @Override
     public String toString() {
         return lastName + ", " + firstName + " [" + dob + "]";
     }
 
-    // Check if two persons are the same
     public boolean equals(Person p) {
         return firstName.equalsIgnoreCase(p.firstName) && lastName.equalsIgnoreCase(p.lastName);
     }
 
-    // Various methods of things a person might do.
     public void eat() {
         System.out.println(getClass().getName() + " " + toString() + " is eating...");
     }

@@ -14,6 +14,7 @@ public class PersonGUI extends JFrame {
     private ArrayList<Person> personList;
     private JComboBox<Person> personComboBox;
     private JMenuItem saveMenuItem;
+    private JMenuItem saveAsMenuItem;
 
     private String currentFilePath;
 
@@ -34,18 +35,18 @@ public class PersonGUI extends JFrame {
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(400, 200);
-        setLocationRelativeTo(null); // center window
-        getContentPane().setBackground(Color.decode("#f5f5f5")); // soft light background
+        setLocationRelativeTo(null);
+        getContentPane().setBackground(Color.decode("#f5f5f5"));
 
         personList = new ArrayList<>();
 
-        // === MENU BAR ===
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenuItem newMenuItem = new JMenuItem("New");
         JMenuItem openMenuItem = new JMenuItem("Open...");
         saveMenuItem = new JMenuItem("Save");
-        JMenuItem saveAsMenuItem = new JMenuItem("Save As...");
+        saveAsMenuItem = new JMenuItem("Save As...");
+        saveAsMenuItem.setEnabled(false);
         JMenuItem deleteMenuItem = new JMenuItem("Delete Person");
         JMenuItem exitMenuItem = new JMenuItem("Exit");
         fileMenu.add(newMenuItem);
@@ -63,18 +64,15 @@ public class PersonGUI extends JFrame {
         menuBar.add(helpMenu);
         setJMenuBar(menuBar);
 
-        // === MAIN PANEL ===
         JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         mainPanel.setBackground(Color.decode("#f5f5f5"));
 
-        // Person ComboBox
         personComboBox = new JComboBox<>();
         personComboBox.setFont(new Font("SansSerif", Font.PLAIN, 16));
         personComboBox.setPreferredSize(new Dimension(300, 30));
         mainPanel.add(personComboBox, BorderLayout.NORTH);
 
-        // Buttons Panel
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
         buttonPanel.setBackground(Color.decode("#f5f5f5"));
@@ -93,7 +91,6 @@ public class PersonGUI extends JFrame {
 
         add(mainPanel);
 
-        // === EVENT HANDLERS ===
         newMenuItem.addActionListener(e -> newFile());
         openMenuItem.addActionListener(e -> openFile());
         saveMenuItem.addActionListener(e -> saveFile());
@@ -388,6 +385,10 @@ public class PersonGUI extends JFrame {
         personList.add(person);
         refreshComboBox();
         isModified = true;
+
+        if (personList.size() == 1) {
+            saveAsMenuItem.setEnabled(true);
+        }
     }
 
     private void deletePerson() {
