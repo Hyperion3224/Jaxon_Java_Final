@@ -338,44 +338,69 @@ public class PersonGUI extends JFrame {
                 break;
 
             case 2:
-                if (!personList.isEmpty()) {
-                    List<RegisteredPerson> registeredPeople = personList.stream()
-                            .filter(p -> p instanceof RegisteredPerson)
-                            .map(p -> (RegisteredPerson) p).collect(Collectors.toList());
-
-                    if (registeredPeople.isEmpty()) {
-                        JOptionPane.showMessageDialog(this, "No Registered Persons available.");
+                firstName = JOptionPane.showInputDialog(this, "Enter first name:");
+                if (firstName == null)
+                    return;
+                while (firstName.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "First name cannot be empty.");
+                    firstName = JOptionPane.showInputDialog(this, "Enter first name:");
+                    if (firstName == null)
                         return;
+                }
+
+                lastName = JOptionPane.showInputDialog(this, "Enter last name:");
+                if (lastName == null)
+                    return;
+                while (lastName.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Last name cannot be empty.");
+                    lastName = JOptionPane.showInputDialog(this, "Enter last name:");
+                    if (lastName == null)
+                        return;
+                }
+
+                OCCCDate occcBirthDate = null;
+                while (occcBirthDate == null) {
+                    try {
+                        String dateInput = JOptionPane.showInputDialog(this, "Enter birth date (dd/mm/yyyy):");
+                        if (dateInput == null)
+                            return;
+
+                        String[] parts = dateInput.split("/");
+                        if (parts.length != 3)
+                            throw new IllegalArgumentException();
+                        int day = Integer.parseInt(parts[0]);
+                        int month = Integer.parseInt(parts[1]);
+                        int year = Integer.parseInt(parts[2]);
+
+                        occcBirthDate = new OCCCDate(day, month, year);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Invalid date format! Please use dd/mm/yyyy.", "Error",
+                                JOptionPane.ERROR_MESSAGE);
                     }
+                }
 
-                    RegisteredPerson selectedPerson = (RegisteredPerson) JOptionPane.showInputDialog(this,
-                            "Select Registered Person:", "Select Registered Person", JOptionPane.QUESTION_MESSAGE, null,
-                            registeredPeople.toArray(), registeredPeople.get(0));
-
-                    if (selectedPerson == null)
+                govID = JOptionPane.showInputDialog(this, "Enter government ID:");
+                if (govID == null)
+                    return;
+                while (govID.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Government ID cannot be empty.");
+                    govID = JOptionPane.showInputDialog(this, "Enter government ID:");
+                    if (govID == null)
                         return;
-                    String studentID = null;
+                }
 
+                String studentID = JOptionPane.showInputDialog(this, "Enter student ID:");
+                if (studentID == null)
+                    return;
+                while (studentID.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Student ID cannot be empty.");
                     studentID = JOptionPane.showInputDialog(this, "Enter student ID:");
                     if (studentID == null)
                         return;
-                    while (studentID.trim().isEmpty()) {
-                        JOptionPane.showMessageDialog(this, "Student ID cannot be empty.");
-                        studentID = JOptionPane.showInputDialog(this, "Enter student ID:");
-                        if (studentID == null) {
-                            return;
-                        }
-                    }
-
-                    OCCCPerson occcPerson = new OCCCPerson(selectedPerson, studentID);
-
-                    personList.remove(selectedPerson);
-
-                    personList.add(occcPerson);
-                } else {
-                    JOptionPane.showMessageDialog(this, "No Registered Persons available.");
-                    return;
                 }
+
+                RegisteredPerson registeredBase = new RegisteredPerson(firstName, lastName, occcBirthDate, govID);
+                person = new OCCCPerson(registeredBase, studentID);
                 break;
             default:
                 JOptionPane.showMessageDialog(this, "Invalid selection.");
